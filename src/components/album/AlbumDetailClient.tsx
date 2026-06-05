@@ -20,9 +20,9 @@ export default function AlbumDetailClient({
   const songs = album.songs ?? [];
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col gap-6 sm:flex-row sm:items-end">
-        <div className="relative aspect-square w-full max-w-[240px] shrink-0 overflow-hidden rounded-lg shadow-lg">
+    <div className="p-4 md:p-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
+        <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-2xl shadow-lift ring-1 ring-white/10 sm:w-[240px]">
           {album.coverImage ? (
             <Image
               src={cloudinaryImg(album.coverImage, 480)}
@@ -43,7 +43,9 @@ export default function AlbumDetailClient({
           <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">
             Album
           </p>
-          <h1 className="mt-1 text-3xl font-bold text-white">{album.name}</h1>
+          <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-white md:text-3xl">
+            {album.name}
+          </h1>
           {album.artistUsername && (
             <p className="mt-2 text-[var(--text-secondary)]">
               {album.artistUsername}

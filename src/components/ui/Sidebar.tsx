@@ -43,11 +43,13 @@ const ADMIN: NavItem[] = [
 function NavLink({
   item,
   active,
-}: Readonly<{ item: NavItem; active: boolean }>) {
+  onNavigate,
+}: Readonly<{ item: NavItem; active: boolean; onNavigate: () => void }>) {
   const Icon = item.icon;
   return (
     <Link
       href={item.href}
+      onClick={onNavigate}
       className={cn(
         "group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all",
         active
@@ -79,7 +81,10 @@ function SectionLabel({ children }: Readonly<{ children: React.ReactNode }>) {
   );
 }
 
-export default function Sidebar() {
+export default function Sidebar({
+  open,
+  onClose,
+}: Readonly<{ open: boolean; onClose: () => void }>) {
   const pathname = usePathname();
   const { user, isArtist, isAdmin, logout } = useAuth();
 
@@ -87,81 +92,112 @@ export default function Sidebar() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <aside className="glass flex h-full w-60 shrink-0 flex-col rounded-2xl p-3">
-      <Link href="/" className="mb-5 flex items-center gap-2.5 px-2 pt-1.5">
-        <Image
-          src="/logo.png"
-          alt="SoundClown"
-          width={36}
-          height={36}
-          priority
-          className="h-9 w-9 rounded-xl object-contain"
+    <>
+      {/* Backdrop (chỉ mobile khi mở drawer) */}
+      {open && (
+        <button
+          aria-label="Đóng menu"
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
         />
-        <span className="text-lg font-extrabold tracking-tight">
-          Sound<span className="text-gradient">Clown</span>
-        </span>
-      </Link>
-
-      <nav className="flex flex-col gap-0.5">
-        {MAIN.map((item) => (
-          <NavLink key={item.href} item={item} active={isActive(item.href)} />
-        ))}
-      </nav>
-
-      {isArtist && (
-        <>
-          <SectionLabel>Nghệ sĩ</SectionLabel>
-          <nav className="flex flex-col gap-0.5">
-            {ARTIST.map((item) => (
-              <NavLink
-                key={item.href}
-                item={item}
-                active={isActive(item.href)}
-              />
-            ))}
-          </nav>
-        </>
       )}
 
-      {isAdmin && (
-        <>
-          <SectionLabel>Quản trị</SectionLabel>
-          <nav className="flex flex-col gap-0.5">
-            {ADMIN.map((item) => (
-              <NavLink
-                key={item.href}
-                item={item}
-                active={isActive(item.href)}
-              />
-            ))}
-          </nav>
-        </>
-      )}
+      <aside
+        className={cn(
+          "glass fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col p-3 transition-transform duration-300",
+          "lg:static lg:z-auto lg:w-60 lg:translate-x-0 lg:rounded-2xl",
+          open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+        )}
+      >
+        <Link
+          href="/"
+          onClick={onClose}
+          className="mb-5 flex items-center gap-2.5 px-2 pt-1.5"
+        >
+          <Image
+            src="/logo.png"
+            alt="SoundClown"
+            width={36}
+            height={36}
+            priority
+            className="h-9 w-9 rounded-xl object-contain"
+          />
+          <span className="text-lg font-extrabold tracking-tight">
+            Sound<span className="text-gradient">Clown</span>
+          </span>
+        </Link>
 
-      <div className="mt-auto border-t border-line pt-3">
-        {user && (
-          <div className="mb-1 flex items-center gap-3 rounded-xl px-2 py-2">
-            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-elevated text-sm font-bold uppercase text-accent">
-              {user.username.charAt(0)}
-            </span>
-            <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-white">
-                {user.username}
-              </p>
-              <div className="mt-0.5">
-                <RoleBadge role={user.role} />
+        <nav className="flex flex-col gap-0.5">
+          {MAIN.map((item) => (
+            <NavLink
+              key={item.href}
+              item={item}
+              active={isActive(item.href)}
+              onNavigate={onClose}
+            />
+          ))}
+        </nav>
+
+        {isArtist && (
+          <>
+            <SectionLabel>Nghệ sĩ</SectionLabel>
+            <nav className="flex flex-col gap-0.5">
+              {ARTIST.map((item) => (
+                <NavLink
+                  key={item.href}
+                  item={item}
+                  active={isActive(item.href)}
+                  onNavigate={onClose}
+                />
+              ))}
+            </nav>
+          </>
+        )}
+
+        {isAdmin && (
+          <>
+            <SectionLabel>Quản trị</SectionLabel>
+            <nav className="flex flex-col gap-0.5">
+              {ADMIN.map((item) => (
+                <NavLink
+                  key={item.href}
+                  item={item}
+                  active={isActive(item.href)}
+                  onNavigate={onClose}
+                />
+              ))}
+            </nav>
+          </>
+        )}
+
+        <div className="mt-auto border-t border-line pt-3">
+          {user && (
+            <div className="mb-1 flex items-center gap-3 rounded-xl px-2 py-2">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-elevated text-sm font-bold uppercase text-accent">
+                {user.username.charAt(0)}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-sm font-semibold text-white">
+                  {user.username}
+                </p>
+                <div className="mt-0.5">
+                  <RoleBadge role={user.role} />
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        <button
-          onClick={logout}
-          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[var(--text-secondary)] transition-colors hover:bg-white/[0.04] hover:text-white"
-        >
-          <LogOut className="h-[18px] w-[18px]" />
-          Đăng xuất
-        </button>
-      </div>
-    </aside>
+          )}
+          <button
+            onClick={() => {
+              onClose();
+              logout();
+            }}
+            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-[var(--text-secondary)] transition-colors hover:bg-white/[0.04] hover:text-white"
+          >
+            <LogOut className="h-[18px] w-[18px]" />
+            Đăng xuất
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

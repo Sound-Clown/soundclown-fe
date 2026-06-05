@@ -16,9 +16,9 @@ export default function HomePage() {
   const songs = data?.content ?? [];
 
   return (
-    <div className="p-6">
-      <header className="mb-7">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+    <div className="p-4 md:p-6">
+      <header className="mb-6 md:mb-7">
+        <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">
           Khám phá <span className="text-gradient">nhạc mới</span>
         </h1>
         <p className="mt-1.5 text-sm text-[var(--text-secondary)]">

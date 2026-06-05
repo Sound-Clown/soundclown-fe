@@ -50,8 +50,8 @@ export default function AdminUsersPage() {
         <EmptyState title="Không có người dùng" />
       ) : (
         <>
-          <div className="overflow-hidden rounded-xl border border-line">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto rounded-xl border border-line">
+            <table className="w-full min-w-[480px] text-sm">
               <thead className="bg-surface text-left text-[var(--text-muted)]">
                 <tr>
                   <th className="px-4 py-3 font-medium">Username</th>

@@ -28,8 +28,8 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="mb-5 text-3xl font-extrabold tracking-tight text-white">
+    <div className="p-4 md:p-6">
+      <h1 className="mb-5 text-2xl font-extrabold tracking-tight text-white md:text-3xl">
         Tìm kiếm
       </h1>
       <div className="relative mb-7 max-w-xl">

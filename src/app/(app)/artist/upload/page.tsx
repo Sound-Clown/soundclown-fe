@@ -82,7 +82,7 @@ export default function UploadPage() {
       <h1 className="mb-6 text-2xl font-bold text-white">Tải lên bài hát</h1>
 
       <form onSubmit={onSubmit} className="space-y-6">
-        <div className="flex gap-6">
+        <div className="flex flex-col gap-6 sm:flex-row">
           <ImageDropzone file={cover} onFile={setCover} error={errors.coverImage} />
           <div className="flex-1 space-y-4">
             <div>

@@ -43,9 +43,9 @@ export default function SongDetailClient({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface/40 to-surface" />
       </div>
 
-      <div className="relative p-6 pt-12">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-end">
-          <div className="relative aspect-square w-full max-w-[240px] shrink-0 overflow-hidden rounded-2xl shadow-lift ring-1 ring-white/10">
+      <div className="relative p-4 pt-10 md:p-6 md:pt-12">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
+          <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-2xl shadow-lift ring-1 ring-white/10 sm:w-[240px]">
             <Image
               src={cover}
               alt={song.title}
@@ -60,7 +60,7 @@ export default function SongDetailClient({
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
               Bài hát
             </p>
-            <h1 className="mt-2 text-4xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
               {song.title}
             </h1>
             <p className="mt-2 text-[var(--text-secondary)]">
