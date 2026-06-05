@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils";
@@ -22,9 +23,13 @@ function LoginForm() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
-  } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    // Chỉ validate khi bấm submit, không re-validate lúc gõ/xóa → khỏi giật
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
+  });
 
   const onSubmit = async (data: LoginInput) => {
     try {
@@ -34,10 +39,12 @@ function LoginForm() {
       );
       const { accessToken, user } = res.data.result!;
       setAuth(user, accessToken);
+      toast.success(`Chào mừng trở lại, ${user.username}!`);
       router.push("/");
       router.refresh();
     } catch (err) {
-      setError("root", { message: getApiErrorMessage(err, "Đăng nhập thất bại") });
+      // Lỗi nghiệp vụ (sai mật khẩu, khóa…) → toast dùng message từ API
+      toast.error(getApiErrorMessage(err, "Đăng nhập thất bại"));
     }
   };
 
@@ -80,10 +87,6 @@ function LoginForm() {
             </p>
           )}
         </div>
-
-        {errors.root && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
-        )}
 
         <button
           type="submit"

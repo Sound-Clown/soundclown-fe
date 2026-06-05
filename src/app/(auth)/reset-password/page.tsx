@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { getApiErrorMessage } from "@/lib/utils";
 import {
@@ -23,15 +24,16 @@ function ResetForm() {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<ResetPasswordInput>({
     resolver: zodResolver(resetPasswordSchema),
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
 
   const onSubmit = async (data: ResetPasswordInput) => {
     if (!token) {
-      setError("root", { message: "Liên kết không hợp lệ (thiếu token)" });
+      toast.error("Liên kết không hợp lệ (thiếu token)");
       return;
     }
     try {
@@ -39,12 +41,11 @@ function ResetForm() {
         token,
         newPassword: data.newPassword,
       });
+      toast.success("Đặt lại mật khẩu thành công!");
       setDone(true);
       setTimeout(() => router.push("/login"), 1500);
     } catch (err) {
-      setError("root", {
-        message: getApiErrorMessage(err, "Đặt lại mật khẩu thất bại"),
-      });
+      toast.error(getApiErrorMessage(err, "Đặt lại mật khẩu thất bại"));
     }
   };
 
@@ -91,9 +92,6 @@ function ResetForm() {
             </p>
           )}
         </div>
-        {errors.root && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
-        )}
         <button
           type="submit"
           disabled={isSubmitting}

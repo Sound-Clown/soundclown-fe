@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { ERROR_MESSAGES } from "./constants";
 
 // Gộp class Tailwind an toàn (clsx + merge xung đột)
 export function cn(...inputs: ClassValue[]) {
@@ -42,12 +41,8 @@ export function cloudinaryImg(
   return url.replace("/upload/", `/upload/f_auto,q_auto,w_${width}/`);
 }
 
-// Lấy message lỗi từ response axios theo `code`, fallback message server / mặc định
+// Lấy message lỗi trực tiếp từ field `message` của ApiResponse, fallback mặc định
 export function getApiErrorMessage(error: unknown, fallback = "Đã có lỗi xảy ra"): string {
-  const err = error as {
-    response?: { data?: { code?: number; message?: string } };
-  };
-  const code = err?.response?.data?.code;
-  if (code && ERROR_MESSAGES[code]) return ERROR_MESSAGES[code];
+  const err = error as { response?: { data?: { message?: string } } };
   return err?.response?.data?.message ?? fallback;
 }

@@ -22,10 +22,11 @@ export default function SettingsPage() {
     register,
     handleSubmit,
     reset,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<ChangePasswordInput>({
     resolver: zodResolver(changePasswordSchema),
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
 
   const onSubmit = async (data: ChangePasswordInput) => {
@@ -35,12 +36,10 @@ export default function SettingsPage() {
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
       });
-      toast.success("Đã đổi mật khẩu");
+      toast.success("Đã đổi mật khẩu thành công");
       reset();
     } catch (err) {
-      setError("root", {
-        message: getApiErrorMessage(err, "Đổi mật khẩu thất bại"),
-      });
+      toast.error(getApiErrorMessage(err, "Đổi mật khẩu thất bại"));
     }
   };
 
@@ -117,9 +116,6 @@ export default function SettingsPage() {
               </p>
             )}
           </div>
-          {errors.root && (
-            <p className="text-sm text-danger">{errors.root.message}</p>
-          )}
           <button
             type="submit"
             disabled={isSubmitting}

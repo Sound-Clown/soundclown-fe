@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
 import { cn, getApiErrorMessage } from "@/lib/utils";
@@ -22,11 +23,12 @@ export default function RegisterPage() {
     handleSubmit,
     watch,
     setValue,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
     defaultValues: { role: "LISTENER" },
+    mode: "onSubmit",
+    reValidateMode: "onSubmit",
   });
 
   const role = watch("role");
@@ -39,10 +41,11 @@ export default function RegisterPage() {
       );
       const { accessToken, user } = res.data.result!;
       setAuth(user, accessToken);
+      toast.success("Tạo tài khoản thành công!");
       router.push("/");
       router.refresh();
     } catch (err) {
-      setError("root", { message: getApiErrorMessage(err, "Đăng ký thất bại") });
+      toast.error(getApiErrorMessage(err, "Đăng ký thất bại"));
     }
   };
 
@@ -101,10 +104,6 @@ export default function RegisterPage() {
             </button>
           ))}
         </div>
-
-        {errors.root && (
-          <p className="text-sm text-danger">{errors.root.message}</p>
-        )}
 
         <button
           type="submit"
