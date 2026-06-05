@@ -29,8 +29,10 @@ api.interceptors.response.use(
       if (typeof document !== "undefined") {
         document.cookie = "auth-user=; path=/; max-age=0";
       }
-      if (typeof window !== "undefined") {
-        window.location.href = reason ? `/login?reason=${reason}` : "/login";
+      if (globalThis.window !== undefined) {
+        globalThis.location.href = reason
+          ? `/login?reason=${reason}`
+          : "/login";
       }
     };
 
