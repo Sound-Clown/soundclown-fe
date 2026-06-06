@@ -5,7 +5,11 @@ import { useAuthStore } from "@/store/auth.store";
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // http://localhost:8080
   timeout: 15000,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+    // Bỏ qua trang cảnh báo của ngrok free (nếu API chạy sau ngrok)
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 // Request interceptor — gắn JWT vào mọi request

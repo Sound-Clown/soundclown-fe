@@ -17,7 +17,11 @@ export async function serverFetch<T>(
     const res = await fetch(`${BASE_URL}${path}`, {
       ...rest,
       next: { revalidate },
-      headers: { "Content-Type": "application/json", ...(rest.headers ?? {}) },
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+        ...(rest.headers ?? {}),
+      },
     });
     if (!res.ok) return null;
     const json = (await res.json()) as ApiResponse<T>;
