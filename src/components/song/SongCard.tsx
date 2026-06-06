@@ -45,20 +45,18 @@ export default function SongCard({
           </span>
         )}
 
-        {/* nút play nổi góc phải dưới */}
+        {/* nút play ở chính giữa — xám trong mờ */}
         <button
           onClick={handleClick}
-          className={`absolute bottom-3 right-3 flex h-11 w-11 items-center justify-center rounded-full bg-accent-gradient text-black shadow-glow transition-all duration-300 hover:scale-110 active:scale-95 ${
-            showPause
-              ? "translate-y-0 opacity-100"
-              : "translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+          className={`absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/25 active:scale-95 ${
+            showPause ? "opacity-100" : "opacity-0 group-hover:opacity-100"
           }`}
           aria-label={showPause ? "Tạm dừng" : "Phát"}
         >
           {showPause ? (
-            <Pause className="h-5 w-5 fill-black" />
+            <Pause className="h-5 w-5 fill-white" />
           ) : (
-            <Play className="ml-0.5 h-5 w-5 fill-black" />
+            <Play className="ml-0.5 h-5 w-5 fill-white" />
           )}
         </button>
       </div>
