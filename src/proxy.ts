@@ -9,11 +9,17 @@ const PUBLIC_PATHS = [
 const ARTIST_PATHS = ["/artist"];
 const ADMIN_PATHS = ["/admin"];
 
-export function middleware(req: NextRequest) {
+// Khớp theo ranh giới segment: "/artist" hoặc "/artist/..." (KHÔNG khớp "/artists")
+function isUnder(pathname: string, base: string) {
+  return pathname === base || pathname.startsWith(base + "/");
+}
+
+// Next 16: file convention "middleware" đổi thành "proxy".
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Đọc user từ cookie "auth-user" (auth store set cookie này khi login).
-  // Zustand persist chỉ lưu localStorage nên middleware không đọc được —
+  // Zustand persist chỉ lưu localStorage nên proxy không đọc được —
   // vì vậy ta set thêm 1 cookie riêng chứa user JSON cho route guard.
   const authCookie = req.cookies.get("auth-user")?.value;
 
@@ -38,15 +44,12 @@ export function middleware(req: NextRequest) {
   }
 
   // Guard role artist
-  if (
-    ARTIST_PATHS.some((p) => pathname.startsWith(p)) &&
-    user.role !== "ARTIST"
-  ) {
+  if (ARTIST_PATHS.some((p) => isUnder(pathname, p)) && user.role !== "ARTIST") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
   // Guard role admin
-  if (ADMIN_PATHS.some((p) => pathname.startsWith(p)) && user.role !== "ADMIN") {
+  if (ADMIN_PATHS.some((p) => isUnder(pathname, p)) && user.role !== "ADMIN") {
     return NextResponse.redirect(new URL("/", req.url));
   }
 

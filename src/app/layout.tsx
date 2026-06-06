@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={manrope.variable}>
+    <html lang="vi" data-scroll-behavior="smooth" className={manrope.variable}>
       <body className="font-sans antialiased">
         <Providers>{children}</Providers>
       </body>

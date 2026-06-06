@@ -5,10 +5,11 @@ import { cloudinaryImg } from "@/lib/utils";
 import AlbumDetailClient from "@/components/album/AlbumDetailClient";
 import type { AlbumDetail } from "@/types";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const album = await serverFetch<AlbumDetail>(`/api/albums/${params.id}`);
+  const { id } = await params;
+  const album = await serverFetch<AlbumDetail>(`/api/albums/${id}`);
   if (!album) return { title: "Không tìm thấy album" };
 
   const cover = cloudinaryImg(album.coverImage, 600);
@@ -26,7 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AlbumDetailPage({ params }: Props) {
-  const album = await serverFetch<AlbumDetail>(`/api/albums/${params.id}`);
+  const { id } = await params;
+  const album = await serverFetch<AlbumDetail>(`/api/albums/${id}`);
   if (!album) notFound();
   return <AlbumDetailClient initialAlbum={album} />;
 }

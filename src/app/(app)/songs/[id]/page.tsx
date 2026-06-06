@@ -5,10 +5,11 @@ import { cloudinaryImg } from "@/lib/utils";
 import SongDetailClient from "@/components/song/SongDetailClient";
 import type { Song } from "@/types";
 
-type Props = { params: { id: string } };
+type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const song = await serverFetch<Song>(`/api/songs/${params.id}`);
+  const { id } = await params;
+  const song = await serverFetch<Song>(`/api/songs/${id}`);
   if (!song) return { title: "Không tìm thấy bài hát" };
 
   const cover = cloudinaryImg(song.coverImage, 600);
@@ -25,7 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SongDetailPage({ params }: Props) {
-  const song = await serverFetch<Song>(`/api/songs/${params.id}`);
+  const { id } = await params;
+  const song = await serverFetch<Song>(`/api/songs/${id}`);
   if (!song) notFound();
   return <SongDetailClient initialSong={song} />;
 }
