@@ -45,6 +45,14 @@ export type AlbumDetail = Album & {
   songs: Song[]; // chỉ bài APPROVED, đủ field (có audioFile)
 };
 
+// Nghệ sĩ (gom từ bài APPROVED) — định danh bằng tên
+export type Artist = {
+  name: string;
+  songCount: number;
+  albumCount: number;
+  totalPlays: number;
+};
+
 // Like toggle response
 export type LikeResponse = {
   liked: boolean;

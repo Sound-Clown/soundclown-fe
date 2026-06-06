@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { usePlayerStore } from "@/store/player.store";
 import { useAuthStore } from "@/store/auth.store";
 import { getApiErrorMessage } from "@/lib/utils";
+import { queryKeys } from "@/lib/constants";
 import type { ApiResponse, LikeResponse } from "@/types";
 import toast from "react-hot-toast";
 
@@ -23,6 +25,7 @@ export function useLike(
 
   const token = useAuthStore((s) => s.token);
   const updateQueueLike = usePlayerStore((s) => s.updateLike);
+  const qc = useQueryClient();
 
   // Đồng bộ khi props đổi (vd đổi bài trong player)
   useEffect(() => {
@@ -53,6 +56,9 @@ export function useLike(
       setLiked(r.liked);
       setLikeCount(r.likeCount);
       updateQueueLike(songId, r.liked, r.likeCount);
+      // Làm mới danh sách yêu thích + chi tiết bài để react-query refetch
+      qc.invalidateQueries({ queryKey: ["liked-songs"] });
+      qc.invalidateQueries({ queryKey: queryKeys.song(songId) });
     } catch (err) {
       // rollback
       setLiked(liked);
@@ -62,7 +68,7 @@ export function useLike(
     } finally {
       setIsPending(false);
     }
-  }, [token, isPending, liked, likeCount, songId, updateQueueLike]);
+  }, [token, isPending, liked, likeCount, songId, updateQueueLike, qc]);
 
   return { liked, likeCount, toggle, isPending };
 }

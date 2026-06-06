@@ -15,10 +15,17 @@ export const queryKeys = {
   songs: (params?: Record<string, unknown>) => ["songs", params] as const,
   song: (id: number) => ["song", id] as const,
   mySongs: (params?: Record<string, unknown>) => ["my-songs", params] as const,
+  likedSongs: (params?: Record<string, unknown>) =>
+    ["liked-songs", params] as const,
   myStats: () => ["my-stats"] as const,
   pendingSongs: (params?: Record<string, unknown>) =>
     ["pending-songs", params] as const,
   search: (q: string, page: number) => ["search", q, page] as const,
+  artists: (params?: Record<string, unknown>) => ["artists", params] as const,
+  artistSongs: (name: string, params?: Record<string, unknown>) =>
+    ["artist-songs", name, params] as const,
+  artistAlbums: (name: string, params?: Record<string, unknown>) =>
+    ["artist-albums", name, params] as const,
   album: (id: number) => ["album", id] as const,
   myAlbums: (params?: Record<string, unknown>) =>
     ["my-albums", params] as const,

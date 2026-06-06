@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Play, Pause } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Play, Pause, ChevronLeft } from "lucide-react";
 import { useSong } from "@/hooks/useSongs";
 import { usePlayer } from "@/hooks/usePlayer";
 import { cloudinaryImg, formatCount, formatDate } from "@/lib/utils";
@@ -13,6 +14,7 @@ import ShareButton from "./ShareButton";
 export default function SongDetailClient({
   initialSong,
 }: Readonly<{ initialSong: Song }>) {
+  const router = useRouter();
   // Hydrate lại theo token (server render không có JWT → liked có thể sai)
   const { data } = useSong(initialSong.id, initialSong);
   const song = data ?? initialSong;
@@ -43,7 +45,15 @@ export default function SongDetailClient({
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface/40 to-surface" />
       </div>
 
-      <div className="relative p-4 pt-10 md:p-6 md:pt-12">
+      <div className="relative p-4 pt-4 md:p-6 md:pt-6">
+        <button
+          onClick={() => router.back()}
+          className="mb-5 inline-flex items-center gap-1 rounded-full bg-white/5 py-1.5 pl-2 pr-3 text-sm text-[var(--text-secondary)] transition-colors hover:bg-white/10 hover:text-white"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Quay lại
+        </button>
+
         <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
           <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-2xl shadow-lift ring-1 ring-white/10 sm:w-[240px]">
             <Image
@@ -64,9 +74,12 @@ export default function SongDetailClient({
               {song.title}
             </h1>
             <p className="mt-2 text-[var(--text-secondary)]">
-              <span className="font-medium text-white">
+              <Link
+                href={`/artists/${encodeURIComponent(song.artistUsername)}`}
+                className="font-medium text-white hover:text-accent hover:underline"
+              >
                 {song.artistUsername}
-              </span>
+              </Link>
               {song.albumName && song.albumId && (
                 <>
                   {" · "}
@@ -87,7 +100,7 @@ export default function SongDetailClient({
             <div className="mt-6 flex items-center gap-5">
               <button
                 onClick={handlePlay}
-                className="flex items-center gap-2 rounded-full bg-accent-gradient px-7 py-3 font-bold text-black shadow-glow transition-transform hover:scale-105 active:scale-95"
+                className="flex min-w-[150px] items-center justify-center gap-2 rounded-full bg-accent-gradient px-7 py-3 font-bold text-black shadow-glow transition-transform hover:scale-105 active:scale-95"
               >
                 {showPause ? (
                   <Pause className="h-5 w-5 fill-black" />

@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Play, Disc3 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Play, Disc3, ChevronLeft } from "lucide-react";
 import { useAlbum } from "@/hooks/useAlbums";
 import { usePlayer } from "@/hooks/usePlayer";
 import { cloudinaryImg } from "@/lib/utils";
@@ -14,6 +16,7 @@ export default function AlbumDetailClient({
 }: Readonly<{
   initialAlbum: AlbumDetail;
 }>) {
+  const router = useRouter();
   const { data } = useAlbum(initialAlbum.id, initialAlbum);
   const album = data ?? initialAlbum;
   const { playSongs } = usePlayer();
@@ -21,6 +24,14 @@ export default function AlbumDetailClient({
 
   return (
     <div className="p-4 md:p-6">
+      <button
+        onClick={() => router.back()}
+        className="mb-5 inline-flex items-center gap-1 rounded-full bg-white/5 py-1.5 pl-2 pr-3 text-sm text-[var(--text-secondary)] transition-colors hover:bg-white/10 hover:text-white"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        Quay lại
+      </button>
+
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-6">
         <div className="relative aspect-square w-40 shrink-0 overflow-hidden rounded-2xl shadow-lift ring-1 ring-white/10 sm:w-[240px]">
           {album.coverImage ? (
@@ -48,7 +59,12 @@ export default function AlbumDetailClient({
           </h1>
           {album.artistUsername && (
             <p className="mt-2 text-[var(--text-secondary)]">
-              {album.artistUsername}
+              <Link
+                href={`/artists/${encodeURIComponent(album.artistUsername)}`}
+                className="hover:text-accent hover:underline"
+              >
+                {album.artistUsername}
+              </Link>
             </p>
           )}
           <p className="mt-1 text-sm text-[var(--text-muted)]">

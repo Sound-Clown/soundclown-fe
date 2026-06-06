@@ -13,6 +13,8 @@ import {
   BarChart3,
   ShieldCheck,
   Users,
+  Mic2,
+  Heart,
   LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -25,6 +27,8 @@ type NavItem = { href: string; label: string; icon: LucideIcon };
 const MAIN: NavItem[] = [
   { href: "/", label: "Trang chủ", icon: Home },
   { href: "/search", label: "Tìm kiếm", icon: Search },
+  { href: "/artists", label: "Nghệ sĩ", icon: Mic2 },
+  { href: "/favorites", label: "Yêu thích", icon: Heart },
   { href: "/settings", label: "Cài đặt", icon: Settings },
 ];
 
@@ -104,8 +108,8 @@ export default function Sidebar({
 
       <aside
         className={cn(
-          "glass fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col p-3 transition-transform duration-300",
-          "lg:static lg:z-auto lg:w-60 lg:translate-x-0 lg:rounded-2xl",
+          "fixed inset-y-0 left-0 z-50 flex h-full w-64 flex-col border-r border-line bg-surface/95 p-3 backdrop-blur-sm transition-transform duration-300",
+          "lg:static lg:z-auto lg:w-60 lg:translate-x-0 lg:rounded-2xl lg:border",
           open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >

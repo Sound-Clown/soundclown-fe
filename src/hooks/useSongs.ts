@@ -38,6 +38,17 @@ export function useSong(id: number, initialData?: Song) {
       return res.data.result!;
     },
     initialData,
+    // RSC fetch không có token → `liked` luôn false. Coi initialData là cũ để
+    // client refetch (có token) lấy đúng trạng thái liked sau khi tải lại.
+    initialDataUpdatedAt: 0,
+  });
+}
+
+// Bài user hiện tại đã like (APPROVED)
+export function useLikedSongs(page = 1) {
+  return useQuery({
+    queryKey: queryKeys.likedSongs({ page }),
+    queryFn: () => fetchSongsPage("/api/songs/liked", page),
   });
 }
 

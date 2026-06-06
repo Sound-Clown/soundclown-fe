@@ -14,6 +14,8 @@ export function useAlbum(id: number, initialData?: AlbumDetail) {
       return res.data.result!;
     },
     initialData,
+    // RSC fetch không có token → `liked` của các bài luôn false. Refetch có token.
+    initialDataUpdatedAt: 0,
   });
 }
 
