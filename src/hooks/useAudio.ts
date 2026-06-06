@@ -31,6 +31,11 @@ export function useAudio() {
     const audio = new Audio();
     audio.preload = "metadata";
     audio.onended = () => next();
+    // Khôi phục âm lượng đã lưu
+    const stored = Number(localStorage.getItem("sc-volume"));
+    if (Number.isFinite(stored) && stored >= 0 && stored <= 1) {
+      audio.volume = stored;
+    }
     audioRef.current = audio;
 
     return () => {

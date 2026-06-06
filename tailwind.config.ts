@@ -53,10 +53,14 @@ const config: Config = {
           "0%, 100%": { transform: "scaleY(0.35)" },
           "50%": { transform: "scaleY(1)" },
         },
+        discspin: {
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.4s ease-out both",
         eq: "eq 0.9s ease-in-out infinite",
+        disc: "discspin 9s linear infinite",
       },
     },
   },

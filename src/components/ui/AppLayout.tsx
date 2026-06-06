@@ -8,9 +8,9 @@ import Sidebar from "./Sidebar";
 import PlayerBar from "@/components/player/PlayerBar";
 
 /**
- * Khung chính: Sidebar (drawer trên mobile, cố định từ lg) + nội dung cuộn
- * + PlayerBar cố định đáy. PlayerBar mount đúng 1 lần ở đây → audio không
- * reload khi đổi trang.
+ * Khung chính: Sidebar (drawer mobile, cố định từ lg) ở cột trái — full chiều cao.
+ * Cột phải xếp dọc: nội dung cuộn (main) + PlayerBar. Nhờ vậy PlayerBar chỉ trải
+ * từ sidebar sang phải, không đè lên sidebar. PlayerBar mount 1 lần → audio liền mạch.
  */
 export default function AppLayout({ children }: Readonly<{ children: ReactNode }>) {
   const [navOpen, setNavOpen] = useState(false);
@@ -41,14 +41,17 @@ export default function AppLayout({ children }: Readonly<{ children: ReactNode }
         </Link>
       </header>
 
-      <div className="flex flex-1 overflow-hidden p-2 pb-0 lg:p-3">
+      <div className="flex flex-1 gap-3 overflow-hidden p-2 lg:p-3">
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
-        <main className="flex-1 overflow-y-auto rounded-2xl border border-line bg-surface/40 pb-24 backdrop-blur-sm md:pb-28 lg:ml-3">
-          <div className="animate-fade-in">{children}</div>
-        </main>
-      </div>
 
-      <PlayerBar />
+        {/* Cột phải: nội dung + player */}
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
+          <main className="flex-1 overflow-y-auto rounded-2xl border border-line bg-surface/40 backdrop-blur-sm">
+            <div className="animate-fade-in">{children}</div>
+          </main>
+          <PlayerBar />
+        </div>
+      </div>
     </div>
   );
 }
