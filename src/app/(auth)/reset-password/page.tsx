@@ -32,10 +32,6 @@ function ResetForm() {
   });
 
   const onSubmit = async (data: ResetPasswordInput) => {
-    if (!token) {
-      toast.error("Liên kết không hợp lệ (thiếu token)");
-      return;
-    }
     try {
       await api.post("/api/auth/reset-password", {
         token,
@@ -48,6 +44,26 @@ function ResetForm() {
       toast.error(getApiErrorMessage(err, "Đặt lại mật khẩu thất bại"));
     }
   };
+
+  // Link thiếu token → báo ngay, không hiện form
+  if (!token) {
+    return (
+      <div className="text-center">
+        <h2 className="mb-2 text-xl font-semibold text-white">
+          Liên kết không hợp lệ
+        </h2>
+        <p className="text-sm text-[var(--text-secondary)]">
+          Liên kết đặt lại mật khẩu thiếu hoặc sai token. Vui lòng yêu cầu lại.
+        </p>
+        <Link
+          href="/forgot-password"
+          className="mt-6 inline-block text-accent hover:underline"
+        >
+          Yêu cầu liên kết mới
+        </Link>
+      </div>
+    );
+  }
 
   if (done) {
     return (
