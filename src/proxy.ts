@@ -71,6 +71,8 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Bỏ qua static assets & file có đuôi
-  matcher: [String.raw`/((?!_next/static|_next/image|favicon.ico|.*\..*).*)`],
+  // Phải là string literal thường — Next phân tích tĩnh matcher, KHÔNG nhận
+  // String.raw`...` (tagged template) → build lỗi "Invalid segment configuration".
+  // NOSONAR — đừng auto-fix sang String.raw, sẽ làm hỏng build.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)"], // NOSONAR
 };
