@@ -6,20 +6,24 @@ import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { usePendingSongs } from "@/hooks/useSongs";
+import { usePlayer } from "@/hooks/usePlayer";
 import { getApiErrorMessage } from "@/lib/utils";
 import { queryKeys } from "@/lib/constants";
 import SongRow from "@/components/song/SongRow";
 import Pagination from "@/components/ui/Pagination";
 import EmptyState from "@/components/ui/EmptyState";
 import Modal from "@/components/ui/Modal";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import { SongRowSkeleton } from "@/components/ui/Skeleton";
 import type { Song } from "@/types";
 
 export default function AdminSongsPage() {
   const [page, setPage] = useState(1);
   const { data, isLoading } = usePendingSongs(page);
+  const { playSongs } = usePlayer();
   const qc = useQueryClient();
   const [rejecting, setRejecting] = useState<Song | null>(null);
+  const [approving, setApproving] = useState<Song | null>(null);
   const [reason, setReason] = useState("");
   const [busyId, setBusyId] = useState<number | null>(null);
 
@@ -59,11 +63,11 @@ export default function AdminSongsPage() {
               <SongRow
                 key={song.id}
                 song={song}
-                onPlay={() => {}}
+                onPlay={() => playSongs(songs, songs.indexOf(song), "home")}
                 trailing={
                   <div className="flex items-center gap-2">
                     <button
-                      onClick={() => review(song.id, true)}
+                      onClick={() => setApproving(song)}
                       disabled={busyId === song.id}
                       className="flex items-center gap-1 rounded-md bg-green-500/20 px-2 py-1 text-xs text-green-400 hover:bg-green-500/30 disabled:opacity-50"
                     >
@@ -88,6 +92,19 @@ export default function AdminSongsPage() {
           />
         </>
       )}
+
+      <ConfirmModal
+        open={!!approving}
+        onClose={() => setApproving(null)}
+        onConfirm={() => {
+          if (approving) review(approving.id, true);
+          setApproving(null);
+        }}
+        title="Duyệt bài hát"
+        message={`Duyệt "${approving?.title}"? Bài hát sẽ được công khai cho người nghe.`}
+        confirmLabel="Duyệt"
+        loading={busyId === approving?.id}
+      />
 
       <Modal
         open={!!rejecting}

@@ -12,7 +12,9 @@ import { queryKeys } from "@/lib/constants";
 import RoleBadge from "@/components/ui/RoleBadge";
 import Pagination from "@/components/ui/Pagination";
 import EmptyState from "@/components/ui/EmptyState";
+import ConfirmModal from "@/components/ui/ConfirmModal";
 import { Skeleton } from "@/components/ui/Skeleton";
+import type { UserProfile } from "@/types";
 
 export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
@@ -20,6 +22,7 @@ export default function AdminUsersPage() {
   const { user: me } = useAuth();
   const qc = useQueryClient();
   const [busyId, setBusyId] = useState<number | null>(null);
+  const [target, setTarget] = useState<UserProfile | null>(null);
 
   const users = data?.content ?? [];
 
@@ -89,7 +92,7 @@ export default function AdminUsersPage() {
                         </span>
                       ) : (
                         <button
-                          onClick={() => toggleLock(u.id)}
+                          onClick={() => setTarget(u)}
                           disabled={busyId === u.id}
                           className="inline-flex items-center gap-1 rounded-md bg-elevated px-2.5 py-1.5 text-xs text-white hover:bg-line disabled:opacity-50"
                         >
@@ -117,6 +120,24 @@ export default function AdminUsersPage() {
           />
         </>
       )}
+
+      <ConfirmModal
+        open={!!target}
+        onClose={() => setTarget(null)}
+        onConfirm={() => {
+          if (target) toggleLock(target.id);
+          setTarget(null);
+        }}
+        title={target?.active ? "Khóa người dùng" : "Mở khóa người dùng"}
+        message={
+          target?.active
+            ? `Khóa "${target?.username}"? Người dùng sẽ không đăng nhập được.`
+            : `Mở khóa "${target?.username}"? Người dùng có thể đăng nhập lại.`
+        }
+        confirmLabel={target?.active ? "Khóa" : "Mở khóa"}
+        danger={target?.active}
+        loading={busyId === target?.id}
+      />
     </div>
   );
 }
