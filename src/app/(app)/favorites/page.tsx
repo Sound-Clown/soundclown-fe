@@ -44,6 +44,7 @@ export default function FavoritesPage() {
               <SongCard
                 key={song.id}
                 song={song}
+                priority={index < 5}
                 onPlay={() => playSongs(songs, index, "home")}
               />
             ))}

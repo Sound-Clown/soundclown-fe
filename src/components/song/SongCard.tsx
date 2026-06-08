@@ -11,9 +11,11 @@ import type { Song } from "@/types";
 export default function SongCard({
   song,
   onPlay,
+  priority = false,
 }: Readonly<{
   song: Song;
   onPlay: () => void;
+  priority?: boolean; // ảnh above-the-fold (LCP) → loading eager
 }>) {
   const { isCurrent, isPlaying, togglePlay } = usePlayer();
   const active = isCurrent(song.id);
@@ -32,6 +34,7 @@ export default function SongCard({
           src={cloudinaryImg(song.coverImage, 400)}
           alt={song.title}
           fill
+          priority={priority}
           sizes="(max-width: 768px) 50vw, (max-width: 1280px) 25vw, 20vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
