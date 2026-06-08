@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 export default function Modal({
@@ -16,6 +17,9 @@ export default function Modal({
   children: ReactNode;
   className?: string;
 }>) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   // Đóng bằng Esc + khóa scroll nền
   useEffect(() => {
     if (!open) return;
@@ -28,9 +32,11 @@ export default function Modal({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (!open || !mounted) return null;
 
-  return (
+  // Portal ra document.body: thoát containing block do ancestor có backdrop-filter
+  // (main có backdrop-blur) tạo ra → modal mới căn giữa cả viewport.
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4"
       onClick={onClose}
@@ -55,6 +61,7 @@ export default function Modal({
         )}
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
