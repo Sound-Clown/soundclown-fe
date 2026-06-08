@@ -11,25 +11,28 @@ export const ROLES = {
 } as const;
 
 // Query keys chuẩn hóa cho TanStack Query
+// Gọi KHÔNG tham số → trả prefix thuần (vd ["songs"]) để invalidateQueries match
+// được mọi query con (["songs", {page}]). Nếu kèm undefined sẽ KHÔNG match.
+type Params = Record<string, unknown>;
+const key = (base: string, params?: Params) =>
+  params ? [base, params] : [base];
+
 export const queryKeys = {
-  songs: (params?: Record<string, unknown>) => ["songs", params] as const,
+  songs: (params?: Params) => key("songs", params),
   song: (id: number) => ["song", id] as const,
-  mySongs: (params?: Record<string, unknown>) => ["my-songs", params] as const,
-  likedSongs: (params?: Record<string, unknown>) =>
-    ["liked-songs", params] as const,
+  mySongs: (params?: Params) => key("my-songs", params),
+  likedSongs: (params?: Params) => key("liked-songs", params),
   myStats: () => ["my-stats"] as const,
-  pendingSongs: (params?: Record<string, unknown>) =>
-    ["pending-songs", params] as const,
+  pendingSongs: (params?: Params) => key("pending-songs", params),
   search: (q: string, page: number) => ["search", q, page] as const,
-  artists: (params?: Record<string, unknown>) => ["artists", params] as const,
-  artistSongs: (name: string, params?: Record<string, unknown>) =>
-    ["artist-songs", name, params] as const,
-  artistAlbums: (name: string, params?: Record<string, unknown>) =>
-    ["artist-albums", name, params] as const,
+  artists: (params?: Params) => key("artists", params),
+  artistSongs: (name: string, params?: Params) =>
+    params ? ["artist-songs", name, params] : ["artist-songs", name],
+  artistAlbums: (name: string, params?: Params) =>
+    params ? ["artist-albums", name, params] : ["artist-albums", name],
   album: (id: number) => ["album", id] as const,
-  myAlbums: (params?: Record<string, unknown>) =>
-    ["my-albums", params] as const,
+  myAlbums: (params?: Params) => key("my-albums", params),
   me: () => ["me"] as const,
-  users: (params?: Record<string, unknown>) => ["users", params] as const,
+  users: (params?: Params) => key("users", params),
   user: (id: number) => ["user", id] as const,
 };
