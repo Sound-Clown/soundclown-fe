@@ -13,49 +13,49 @@ TanStack Query · Axios · Zod · Bun.
 
 ### Home & player
 
-![Home](docs/screenshots/ui-home.png)
+![Home](.github/screenshots/ui-home.png)
 
-![Now playing](docs/screenshots/ui-nowplaying.png)
+![Now playing](.github/screenshots/ui-nowplaying.png)
 
 ### Listener
 
 | Song detail & player                         | Search                                    |
 | -------------------------------------------- | ----------------------------------------- |
-| ![Song detail](docs/screenshots/ui-song.png) | ![Search](docs/screenshots/ui-search.png) |
+| ![Song detail](.github/screenshots/ui-song.png) | ![Search](.github/screenshots/ui-search.png) |
 
 | Album detail                            | Liked songs                                     |
 | --------------------------------------- | ----------------------------------------------- |
-| ![Album](docs/screenshots/ui-album.png) | ![Favorites](docs/screenshots/ui-favorites.png) |
+| ![Album](.github/screenshots/ui-album.png) | ![Favorites](.github/screenshots/ui-favorites.png) |
 
 | Artists                                     | Artist page                               |
 | ------------------------------------------- | ----------------------------------------- |
-| ![Artists](docs/screenshots/ui-artists.png) | ![Artist](docs/screenshots/ui-artist.png) |
+| ![Artists](.github/screenshots/ui-artists.png) | ![Artist](.github/screenshots/ui-artist.png) |
 
 ### Artist
 
 | Upload                                    | My songs                                          |
 | ----------------------------------------- | ------------------------------------------------- |
-| ![Upload](docs/screenshots/ui-upload.png) | ![My songs](docs/screenshots/ui-artist-songs.png) |
+| ![Upload](.github/screenshots/ui-upload.png) | ![My songs](.github/screenshots/ui-artist-songs.png) |
 
 | My albums                                           | Stats                                   |
 | --------------------------------------------------- | --------------------------------------- |
-| ![My albums](docs/screenshots/ui-artist-albums.png) | ![Stats](docs/screenshots/ui-stats.png) |
+| ![My albums](.github/screenshots/ui-artist-albums.png) | ![Stats](.github/screenshots/ui-stats.png) |
 
 ### Admin
 
 | Review queue                                   | Reject with reason                              |
 | ---------------------------------------------- | ----------------------------------------------- |
-| ![Review](docs/screenshots/ui-admin-songs.png) | ![Reject](docs/screenshots/ui-admin-review.png) |
+| ![Review](.github/screenshots/ui-admin-songs.png) | ![Reject](.github/screenshots/ui-admin-review.png) |
 
 | User management                               |     |
 | --------------------------------------------- | --- |
-| ![Users](docs/screenshots/ui-admin-users.png) |     |
+| ![Users](.github/screenshots/ui-admin-users.png) |     |
 
 ### Authentication
 
 | Login                                   | Register                                      |
 | --------------------------------------- | --------------------------------------------- |
-| ![Login](docs/screenshots/ui-login.png) | ![Register](docs/screenshots/ui-register.png) |
+| ![Login](.github/screenshots/ui-login.png) | ![Register](.github/screenshots/ui-register.png) |
 
 ## Getting Started
 
