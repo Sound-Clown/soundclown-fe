@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
+import PasswordInput from "@/components/ui/PasswordInput";
 import { getApiErrorMessage } from "@/lib/utils";
 import {
   resetPasswordSchema,
@@ -81,9 +82,8 @@ function ResetForm() {
       <h2 className="mb-6 text-xl font-semibold text-white">Đặt lại mật khẩu</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <input
+          <PasswordInput
             {...register("newPassword")}
-            type="password"
             placeholder="Mật khẩu mới"
             className={inputCls}
             autoComplete="new-password"
@@ -95,9 +95,8 @@ function ResetForm() {
           )}
         </div>
         <div>
-          <input
+          <PasswordInput
             {...register("confirmPassword")}
-            type="password"
             placeholder="Xác nhận mật khẩu"
             className={inputCls}
             autoComplete="new-password"

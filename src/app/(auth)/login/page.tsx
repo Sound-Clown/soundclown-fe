@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
+import PasswordInput from "@/components/ui/PasswordInput";
 import { getApiErrorMessage } from "@/lib/utils";
 import { loginSchema, type LoginInput } from "@/validations/auth.schema";
 import type { ApiResponse, AuthResponse } from "@/types";
@@ -74,9 +75,8 @@ function LoginForm() {
         </div>
 
         <div>
-          <input
+          <PasswordInput
             {...register("password")}
-            type="password"
             placeholder="Mật khẩu"
             className={inputCls}
             autoComplete="current-password"

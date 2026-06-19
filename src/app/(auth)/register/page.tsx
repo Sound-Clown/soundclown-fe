@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { useAuthStore } from "@/store/auth.store";
+import PasswordInput from "@/components/ui/PasswordInput";
 import { cn, getApiErrorMessage } from "@/lib/utils";
 import { registerSchema, type RegisterInput } from "@/validations/auth.schema";
 import type { ApiResponse, AuthResponse } from "@/types";
@@ -74,9 +75,8 @@ export default function RegisterPage() {
         </div>
 
         <div>
-          <input
+          <PasswordInput
             {...register("password")}
-            type="password"
             placeholder="Mật khẩu"
             className={inputCls}
             autoComplete="new-password"

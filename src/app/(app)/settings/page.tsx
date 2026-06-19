@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
+import PasswordInput from "@/components/ui/PasswordInput";
 import { getApiErrorMessage } from "@/lib/utils";
 import {
   changePasswordSchema,
@@ -75,9 +76,8 @@ export default function SettingsPage() {
         <h2 className="mb-4 text-lg font-semibold text-white">Đổi mật khẩu</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <input
+            <PasswordInput
               {...register("oldPassword")}
-              type="password"
               placeholder="Mật khẩu hiện tại"
               className={inputCls}
               autoComplete="current-password"
@@ -89,9 +89,8 @@ export default function SettingsPage() {
             )}
           </div>
           <div>
-            <input
+            <PasswordInput
               {...register("newPassword")}
-              type="password"
               placeholder="Mật khẩu mới"
               className={inputCls}
               autoComplete="new-password"
@@ -103,9 +102,8 @@ export default function SettingsPage() {
             )}
           </div>
           <div>
-            <input
+            <PasswordInput
               {...register("confirmPassword")}
-              type="password"
               placeholder="Xác nhận mật khẩu mới"
               className={inputCls}
               autoComplete="new-password"
