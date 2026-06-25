@@ -15,12 +15,15 @@ import {
   Users,
   Mic2,
   Heart,
+  Crown,
   LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePremium } from "@/hooks/usePremium";
 import { cn } from "@/lib/utils";
 import RoleBadge from "./RoleBadge";
+import PremiumBadge from "@/components/premium/PremiumBadge";
 
 type NavItem = { href: string; label: string; icon: LucideIcon };
 
@@ -29,6 +32,7 @@ const MAIN: NavItem[] = [
   { href: "/search", label: "Tìm kiếm", icon: Search },
   { href: "/artists", label: "Nghệ sĩ", icon: Mic2 },
   { href: "/favorites", label: "Yêu thích", icon: Heart },
+  { href: "/premium", label: "Premium", icon: Crown },
   { href: "/settings", label: "Cài đặt", icon: Settings },
 ];
 
@@ -91,6 +95,7 @@ export default function Sidebar({
 }: Readonly<{ open: boolean; onClose: () => void }>) {
   const pathname = usePathname();
   const { user, isArtist, isAdmin, logout } = useAuth();
+  const { premium } = usePremium();
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -184,8 +189,9 @@ export default function Sidebar({
                 <p className="truncate text-sm font-semibold text-white">
                   {user.username}
                 </p>
-                <div className="mt-0.5">
+                <div className="mt-0.5 flex flex-wrap items-center gap-1">
                   <RoleBadge role={user.role} />
+                  {premium && <PremiumBadge />}
                 </div>
               </div>
             </div>

@@ -16,6 +16,7 @@ export type PlayerSong = Pick<
   | "albumName"
   | "liked"
   | "likeCount"
+  | "premiumOnly"
 >;
 
 // Helper: chuyển Song (đầy đủ) → PlayerSong
@@ -31,5 +32,6 @@ export function toPlayerSong(s: Song): PlayerSong {
     albumName: s.albumName,
     liked: s.liked,
     likeCount: s.likeCount,
+    premiumOnly: s.premiumOnly,
   };
 }

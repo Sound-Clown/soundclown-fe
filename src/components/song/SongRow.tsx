@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Lock } from "lucide-react";
 import { usePlayer } from "@/hooks/usePlayer";
 import { cloudinaryImg, formatCount } from "@/lib/utils";
 import Equalizer from "@/components/player/Equalizer";
@@ -14,6 +14,7 @@ export type SongRowData = {
   coverImage: string | null;
   playCount: number;
   likeCount: number;
+  premiumOnly?: boolean;
 };
 
 export default function SongRow({
@@ -67,11 +68,14 @@ export default function SongRow({
 
       <div className="min-w-0 flex-1">
         <p
-          className={`truncate text-sm font-semibold ${
+          className={`flex items-center gap-1.5 truncate text-sm font-semibold ${
             active ? "text-accent" : "text-white"
           }`}
         >
-          {song.title}
+          {song.premiumOnly && (
+            <Lock className="h-3.5 w-3.5 shrink-0 text-accent" aria-label="Premium" />
+          )}
+          <span className="truncate">{song.title}</span>
         </p>
         <p className="truncate text-xs text-[var(--text-secondary)]">
           {song.artistUsername}

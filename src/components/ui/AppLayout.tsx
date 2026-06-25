@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import Sidebar from "./Sidebar";
 import PlayerBar from "@/components/player/PlayerBar";
+import UpgradeModal from "@/components/premium/UpgradeModal";
 
 /**
  * Khung chính: Sidebar (drawer mobile, cố định từ lg) ở cột trái — full chiều cao.
@@ -52,6 +53,8 @@ export default function AppLayout({ children }: Readonly<{ children: ReactNode }
           <PlayerBar />
         </div>
       </div>
+
+      <UpgradeModal />
     </div>
   );
 }
