@@ -137,7 +137,10 @@ export default function Sidebar({
         </Link>
 
         <nav className="flex flex-col gap-0.5">
-          {MAIN.map((item) => (
+          {MAIN.filter(
+            // Admin nghe được hết → không cần nâng cấp Premium
+            (item) => !(item.href === "/premium" && isAdmin),
+          ).map((item) => (
             <NavLink
               key={item.href}
               item={item}

@@ -15,7 +15,7 @@ export type Payment = {
   amount: number;
   currency: string;
   status: PaymentStatus;
-  orderInfo: string;
+  orderInfo?: string;
   durationDays: number;
   createdAt: string;
   paidAt: string | null;

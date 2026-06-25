@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Crown, Check, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { usePremium, useCheckout, usePaymentHistory } from "@/hooks/usePremium";
+import { useAuth } from "@/hooks/useAuth";
 import { formatVnd, formatDate, getApiErrorMessage } from "@/lib/utils";
 import { PREMIUM_PRICE, PREMIUM_DAYS } from "@/lib/constants";
 import PremiumBadge from "@/components/premium/PremiumBadge";
@@ -26,17 +27,35 @@ function Cell({ on }: Readonly<{ on: boolean }>) {
 }
 
 export default function PremiumPage() {
+  const { isAdmin } = useAuth();
   const { premium, premiumUntil } = usePremium();
   const checkout = useCheckout();
   const history = usePaymentHistory();
   const [redirecting, setRedirecting] = useState(false);
+
+  // Admin nghe được toàn bộ nhạc → không cần (và không được) nâng cấp Premium
+  if (isAdmin) {
+    return (
+      <div className="mx-auto flex max-w-md flex-col items-center px-4 py-20 text-center">
+        <span className="mb-5 grid h-16 w-16 place-items-center rounded-2xl bg-accent-gradient shadow-glow">
+          <Crown className="h-8 w-8 text-black" />
+        </span>
+        <h1 className="text-2xl font-extrabold tracking-tight text-white">
+          Tài khoản quản trị
+        </h1>
+        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+          Quản trị viên đã có toàn quyền nghe nhạc, không cần nâng cấp Premium.
+        </p>
+      </div>
+    );
+  }
 
   const onCheckout = async () => {
     setRedirecting(true);
     try {
       const result = await checkout.mutateAsync();
       // PHẢI redirect cả trang sang VNPay (không fetch/XHR)
-      window.location.href = result.paymentUrl;
+      globalThis.location.href = result.paymentUrl;
     } catch (err) {
       setRedirecting(false);
       toast.error(getApiErrorMessage(err, "Không tạo được thanh toán"));
