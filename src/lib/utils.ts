@@ -28,6 +28,11 @@ export function formatDate(iso: string): string {
   return d.toLocaleDateString("vi-VN");
 }
 
+// 50000 -> "50.000đ"
+export function formatVnd(amount: number): string {
+  return `${amount.toLocaleString("vi-VN")}đ`;
+}
+
 // Tối ưu ảnh Cloudinary: chèn transform f_auto,q_auto,w_<width> vào URL /upload/.
 // URL không phải Cloudinary thì trả nguyên.
 export function cloudinaryImg(

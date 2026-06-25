@@ -6,6 +6,7 @@ import { Play, Pause, Heart } from "lucide-react";
 import { usePlayer } from "@/hooks/usePlayer";
 import { cloudinaryImg, formatCount } from "@/lib/utils";
 import Equalizer from "@/components/player/Equalizer";
+import PremiumBadge from "@/components/premium/PremiumBadge";
 import type { Song } from "@/types";
 
 export default function SongCard({
@@ -47,6 +48,9 @@ export default function SongCard({
             <Equalizer playing={isPlaying} className="h-3" />
           </span>
         )}
+
+        {/* nhãn PRO cho bài premium-only */}
+        {song.premiumOnly && <PremiumBadge className="absolute right-2 top-2" />}
 
         {/* nút play ở chính giữa — xám trong mờ */}
         <button

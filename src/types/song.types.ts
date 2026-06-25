@@ -14,6 +14,7 @@ export type Song = {
   playCount: number;
   likeCount: number;
   liked: boolean; // user hiện tại đã like chưa (tên field theo backend)
+  premiumOnly: boolean; // chỉ tài khoản Premium mới nghe được
   createdAt: string;
 };
 

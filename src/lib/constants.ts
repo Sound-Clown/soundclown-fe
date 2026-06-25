@@ -4,6 +4,13 @@ export const PLAY_COUNT_THRESHOLD_MS = 30_000;
 // Số item mặc định mỗi trang
 export const PAGE_SIZE = 20;
 
+// Gói Premium
+export const PREMIUM_PRICE = 50000; // đồng
+export const PREMIUM_DAYS = 30;
+
+// Mã lỗi: bài chỉ dành cho Premium
+export const PREMIUM_REQUIRED_CODE = 1305;
+
 export const ROLES = {
   LISTENER: "LISTENER",
   ARTIST: "ARTIST",
@@ -35,4 +42,6 @@ export const queryKeys = {
   me: () => ["me"] as const,
   users: (params?: Params) => key("users", params),
   user: (id: number) => ["user", id] as const,
+  meProfile: (id: number) => ["me-profile", id] as const,
+  payments: () => ["payments"] as const,
 };

@@ -3,8 +3,9 @@
 import { useEffect, useRef, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { usePlayerStore } from "@/store/player.store";
+import { useUiStore } from "@/store/ui.store";
 import api from "@/lib/api";
-import { PLAY_COUNT_THRESHOLD_MS } from "@/lib/constants";
+import { PLAY_COUNT_THRESHOLD_MS, PREMIUM_REQUIRED_CODE } from "@/lib/constants";
 
 /**
  * Quản 1 HTMLAudioElement duy nhất. Chỉ nên dùng ở 1 nơi (PlayerBar mount trong
@@ -46,33 +47,56 @@ export function useAudio() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Đổi bài → load source mới + setup play-count timer
+  // Đổi bài → (gate premium) → load source + đếm lượt nghe
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !currentSong) return;
 
-    audio.src = currentSong.audioFile;
-    audio.load();
+    let cancelled = false;
+    if (playCountTimerRef.current) clearTimeout(playCountTimerRef.current);
 
-    if (isPlaying) {
-      audio.play().catch(() => setIsPlaying(false));
+    // Dừng + xoá src cũ ngay để không phát nhầm bài trước khi gate xong
+    audio.pause();
+    audio.src = "";
+
+    const loadAndPlay = () => {
+      if (cancelled || !audioRef.current) return;
+      audioRef.current.src = currentSong.audioFile;
+      audioRef.current.load();
+      if (isPlaying) audioRef.current.play().catch(() => setIsPlaying(false));
+    };
+
+    if (currentSong.premiumOnly) {
+      // Phải vượt kiểm tra quyền ở endpoint /play trước khi phát.
+      api
+        .post(`/api/songs/${currentSong.id}/play`)
+        .then(() => loadAndPlay()) // có quyền (đã đếm sẵn, khỏi timer)
+        .catch((err) => {
+          if (cancelled) return;
+          if (err?.response?.data?.code === PREMIUM_REQUIRED_CODE) {
+            useUiStore.getState().openUpgrade();
+          }
+          setIsPlaying(false);
+        });
+    } else {
+      loadAndPlay();
+      // Đếm lượt nghe sau ~30s nghe thật
+      playCountTimerRef.current = setTimeout(() => {
+        api.post(`/api/songs/${currentSong.id}/play`).catch(() => {});
+      }, PLAY_COUNT_THRESHOLD_MS);
     }
 
-    if (playCountTimerRef.current) clearTimeout(playCountTimerRef.current);
-    playCountTimerRef.current = setTimeout(() => {
-      api.post(`/api/songs/${currentSong.id}/play`).catch(() => {});
-    }, PLAY_COUNT_THRESHOLD_MS);
-
     return () => {
+      cancelled = true;
       if (playCountTimerRef.current) clearTimeout(playCountTimerRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSong?.id]);
 
-  // Sync play/pause
+  // Sync play/pause — bỏ qua khi chưa có src (đang gate premium / gate fail)
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio || !currentSong) return;
+    if (!audio || !currentSong || !audio.src) return;
     if (isPlaying) {
       audio.play().catch(() => setIsPlaying(false));
     } else {

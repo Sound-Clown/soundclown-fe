@@ -10,6 +10,7 @@ import { cloudinaryImg, formatCount, formatDate } from "@/lib/utils";
 import { toPlayerSong, type Song } from "@/types";
 import LikeButton from "./LikeButton";
 import ShareButton from "./ShareButton";
+import PremiumBadge from "@/components/premium/PremiumBadge";
 
 export default function SongDetailClient({
   initialSong,
@@ -67,8 +68,9 @@ export default function SongDetailClient({
           </div>
 
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-accent">
               Bài hát
+              {song.premiumOnly && <PremiumBadge />}
             </p>
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-white md:text-4xl">
               {song.title}
